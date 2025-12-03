@@ -35,9 +35,9 @@ logic [9:0] digitxcher;
 logic [9:0] digitycher;
 
 logic [5:0] img_pixelbackgounrd;
-logic [5:0] img_xbackground, img_ybackground;
-logic [12:0] digitxbackground;
-logic [12:0] digitybackground;
+logic [7:0] img_xbackground, img_ybackground;
+logic [9:0] digitxbackground;
+logic [9:0] digitybackground;
 
 seven inst_sev (
     .x_input(img_xseven),
@@ -70,10 +70,23 @@ cherry inst_cher (
 );
 
 
-logic signed [9:0] y_moving0 = 9'd0;
+logic signed [9:0] y_moving0 = 9'd240;
 logic signed [9:0] y_moving1 = 9'd120;
-logic signed[9:0] y_moving2 = 9'd240;
+logic signed[9:0] y_moving2 = 9'd0;
 logic signed [9:0] y_moving3 = 9'd360;
+
+logic signed [9:0] y_moving4 = 9'd360;
+logic signed [9:0] y_moving5 = 9'd240;
+logic signed [9:0] y_moving6= 9'd120;
+logic signed [9:0] y_moving7 = 9'd0;
+
+
+logic signed [9:0] y_moving8 = 9'd120;
+logic signed [9:0] y_moving9 = 9'd0;
+logic signed[9:0] y_moving10 = 9'd360;
+logic signed [9:0] y_moving11 = 9'd240;
+
+
 
 
 logic sixtyHz;
@@ -107,6 +120,63 @@ always_ff @(posedge sixtyHz) begin
         y_moving3 <= y_moving3 + 1;
 end
 
+
+always_ff @(posedge sixtyHz) begin
+    if (y_moving4 == 480) 
+        y_moving4 <= 0;
+    else
+        y_moving4 <= y_moving4 + 1;
+end
+
+always_ff @(posedge sixtyHz) begin
+    if (y_moving5 == 480) 
+        y_moving5 <= 0;
+    else
+        y_moving5 <= y_moving5 + 1;
+end
+
+always_ff @(posedge sixtyHz) begin
+    if (y_moving6 == 480) 
+        y_moving6 <= 0;
+    else
+        y_moving6 <= y_moving6 + 1;
+end
+
+always_ff @(posedge sixtyHz) begin
+    if (y_moving7 == 480) 
+        y_moving7 <= 0;
+    else
+        y_moving7 <= y_moving7 + 1;
+end
+
+always_ff @(posedge sixtyHz) begin
+    if (y_moving8 == 480) 
+        y_moving8 <= 0;
+    else
+        y_moving8 <= y_moving8 + 1;
+end
+
+always_ff @(posedge sixtyHz) begin
+    if (y_moving9 == 480) 
+        y_moving9 <= 0;
+    else
+        y_moving9 <= y_moving9 + 1;
+end
+
+always_ff @(posedge sixtyHz) begin
+    if (y_moving10 == 480) 
+        y_moving10 <= 0;
+    else
+        y_moving10 <= y_moving10 + 1;
+end
+
+always_ff @(posedge sixtyHz) begin
+    if (y_moving11 == 480) 
+        y_moving11 <= 0;
+    else
+        y_moving11 <= y_moving11 + 1;
+end
+
 logic draw_box_1;
 assign draw_box_1 = (Col < 170 && Col > 50) && (Row > y_moving0 && Row < y_moving0 + 120);
 
@@ -120,28 +190,28 @@ logic draw_box_4;
 assign draw_box_4 = (Col < 170 && Col > 50) && (Row > y_moving3 && Row < y_moving3 + 120 );
 
 logic draw_box_5;
-assign draw_box_5 = (Col < 383 && Col > 263) && (Row > y_moving0 && Row < y_moving0 + 120);
+assign draw_box_5 = (Col < 383 && Col > 263) && (Row > y_moving4 && Row < y_moving4 + 120);
 
 logic draw_box_6;
-assign draw_box_6 = (Col < 383 && Col > 263) && (Row > y_moving2 && Row < y_moving2 + 120);
+assign draw_box_6 = (Col < 383 && Col > 263) && (Row > y_moving5 && Row < y_moving5 + 120);
 
 logic draw_box_7;
-assign draw_box_7 =  (Col < 383 && Col > 263) && (Row > y_moving1  && Row < y_moving1 + 120 );
+assign draw_box_7 =  (Col < 383 && Col > 263) && (Row > y_moving6  && Row < y_moving6 + 120 );
 
 logic draw_box_8;
-assign draw_box_8 = (Col < 383 && Col > 263) && (Row > y_moving3 && Row < y_moving3 + 120 );
+assign draw_box_8 = (Col < 383 && Col > 263) && (Row > y_moving7 && Row < y_moving7 + 120 );
 
 logic draw_box_9;
-assign draw_box_9 = (Col < 596 && Col > 476) && (Row > y_moving0 && Row < y_moving0 + 120);
+assign draw_box_9 = (Col < 596 && Col > 476) && (Row > y_moving8 && Row < y_moving8 + 120);
 
 logic draw_box_10;
-assign draw_box_10 = (Col < 596 && Col > 476) && (Row > y_moving2 && Row < y_moving2 + 120);
+assign draw_box_10 = (Col < 596 && Col > 476) && (Row > y_moving9 && Row < y_moving9 + 120);
 
 logic draw_box_11;
-assign draw_box_11 =  (Col < 596 && Col > 476) && (Row > y_moving1  && Row < y_moving1 + 120 );
+assign draw_box_11 =  (Col < 596 && Col > 476) && (Row > y_moving10  && Row < y_moving10 + 120 );
 
 logic draw_box_12;
-assign draw_box_12 = (Col < 596 && Col > 476) && (Row > y_moving3 && Row < y_moving3 + 120 );
+assign draw_box_12 = (Col < 596 && Col > 476) && (Row > y_moving11 && Row < y_moving11 + 120 );
 
     // Split the screen vertically in half
 always_comb begin
@@ -211,7 +281,7 @@ always_comb begin
     end
     else if (draw_box_5) begin
         digitxseven = Col - 263;
-        digityseven = Row -  (y_moving0 + 1);
+        digityseven = Row -  (y_moving4 + 1);
 
         img_xseven = digitxseven[6:2];   // scale 4x
         img_yseven = digityseven[6:2];
@@ -221,7 +291,7 @@ always_comb begin
     else if (draw_box_6) begin
         
          digitxbar = Col - 263;
-        digitybar = Row -  (y_moving2 + 1);
+        digitybar = Row -  (y_moving5 + 1);
 
         img_xbar = digitxbar[6:2];   // scale 4x
         img_ybar = digitybar[6:2];
@@ -230,7 +300,7 @@ always_comb begin
     end
     else if (draw_box_7) begin
         digitxdia = Col - 263;
-        digitysdia = Row -  (y_moving1 + 1);
+        digitysdia = Row -  (y_moving6 + 1);
 
         img_xdia = digitxdia[6:2];   // scale 4x
         img_ydia = digitysdia[6:2];
@@ -239,7 +309,7 @@ always_comb begin
     end
     else if (draw_box_8) begin
         digitxcher = Col - 263;
-        digitycher = Row -  (y_moving3 + 1);
+        digitycher = Row -  (y_moving7 + 1);
 
         img_xcher = digitxcher[6:2];   // scale 4x
         img_ycher = digitycher[6:2];
@@ -248,7 +318,7 @@ always_comb begin
     end
     else if (draw_box_9) begin
         digitxseven = Col - 476;
-        digityseven = Row -  (y_moving0 + 1);
+        digityseven = Row -  (y_moving8 + 1);
 
         img_xseven = digitxseven[6:2];   // scale 4x
         img_yseven = digityseven[6:2];
@@ -258,7 +328,7 @@ always_comb begin
         else if (draw_box_10) begin
         
          digitxbar = Col - 476;
-        digitybar = Row -  (y_moving2 + 1);
+        digitybar = Row -  (y_moving9 + 1);
 
         img_xbar = digitxbar[6:2];   // scale 4x
         img_ybar = digitybar[6:2];
@@ -267,7 +337,7 @@ always_comb begin
     end
     else if (draw_box_11) begin
         digitxdia = Col - 476;
-        digitysdia = Row -  (y_moving1 + 1);
+        digitysdia = Row -  (y_moving10 + 1);
 
         img_xdia = digitxdia[6:2];   // scale 4x
         img_ydia = digitysdia[6:2];
@@ -276,7 +346,7 @@ always_comb begin
     end
     else if (draw_box_12) begin
         digitxcher = Col - 476;
-        digitycher = Row -  (y_moving3 + 1);
+        digitycher = Row -  (y_moving11 + 1);
 
         img_xcher = digitxcher[6:2];   // scale 4x
         img_ycher = digitycher[6:2];
@@ -287,8 +357,8 @@ always_comb begin
         digitxbackground = Col ;
         digitybackground = Row ;
 
-        img_xbackground = digitxbackground[6:2];   // scale 4x
-        img_ybackground = digitybackground[6:2];
+        img_xbackground = digitxbackground[9:2];   // scale 4x
+        img_ybackground = digitybackground[9:2];
         rgb_patterngen = img_pixelbackgounrd;
     end
 end
