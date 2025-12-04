@@ -5,13 +5,14 @@ module fsm (
     input logic reset
 );
 
+logic [26:0] slowCount;
+
 typedef enum logic [1:0] {
     S0,
     S1,
     S2,
     S3,
-    S4,
-    S5
+    S4
 } statetype;
 
 statetype state, nextstate;
@@ -20,20 +21,21 @@ always_comb begin
     nextstate = state; // keep same state if nothing changes
     case (state)
         S0: if (start) nextstate = S1;
-        S1: // goes to next state on a clock
+        S1: if (slowCount == 26'b11111111111111111111111111) nextstate = S2
         S2: if (c1 == c2 && c2 == c3)
                 nextstate = S3; // check win 
             else
                 nextstate = S4;
-        S3: if (reset) nextstate = S0;
-        S4: if (reset) nextstate = S0;
+        S3: if (reset) nextstate = S0; //win
+        S4: if (reset) nextstate = S0; // lose
     endcase
 end
 
 always_ff @(posedge clk) begin
     if (reset) state <= S0;
     else state <= nextstate;
-    // need to make another clock to go from S1 to S2
+        if (state == S1) slowCount <= slowCount + 1;
+        else slowCount == 0;
 end
 
 
