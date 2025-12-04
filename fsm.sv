@@ -38,6 +38,7 @@ always_ff @(posedge clk) begin
         else slowCount == 0;
 end
 
+endmodule
 
 
 // S0: start game 
