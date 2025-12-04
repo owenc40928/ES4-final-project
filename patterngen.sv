@@ -45,7 +45,7 @@ seven inst_sev (
     .data(img_pixelseven)
 );
 
-background inst_background (
+newbackground inst_background (
     .x_input(img_xbackground),
     .y_input(img_ybackground),
     .data(img_pixelbackgounrd)
@@ -357,8 +357,8 @@ always_comb begin
         digitxbackground = Col ;
         digitybackground = Row ;
 
-        img_xbackground = digitxbackground[9:2];   // scale 4x
-        img_ybackground = digitybackground[9:2];
+        img_xbackground = digitxbackground[9:3];   
+        img_ybackground = digitybackground[9:3];
         rgb_patterngen = img_pixelbackgounrd;
     end
 end
