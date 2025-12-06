@@ -12,7 +12,8 @@ typedef enum logic [1:0] {
     S1,
     S2,
     S3,
-    S4
+    S4,
+    S5
 } statetype;
 
 statetype state, nextstate;
@@ -23,11 +24,14 @@ always_comb begin
         S0: if (start) nextstate = S1;
         S1: if (slowCount == 26'b11111111111111111111111111) nextstate = S2
         S2: if (c1 == c2 && c2 == c3)
-                nextstate = S3; // check win 
+                nextstate = S3; // check jackpot
+        else if (c1 = c2 || c2 == c3 || c1 = c3)
+                nextstate = S4 // check 2/3 is win
             else
-                nextstate = S4;
-        S3: if (reset) nextstate = S0; //win
-        S4: if (reset) nextstate = S0; // lose
+                nextstate = S5;
+        S3: if (reset) nextstate = S0; //jackpot
+        S4: if (reset) nextstate = S0; // you win
+        S5: if (reset) nextstate = S0; // you lose
     endcase
 end
 
