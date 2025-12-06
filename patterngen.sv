@@ -35,7 +35,8 @@ logic [9:0] digitxcher;
 logic [9:0] digitycher;
 
 logic [5:0] img_pixelbackgounrd;
-logic [7:0] img_xbackground, img_ybackground;
+logic [7:0] img_xbackground;
+logic [6:0] img_ybackground;
 logic [9:0] digitxbackground;
 logic [9:0] digitybackground;
 
@@ -86,95 +87,34 @@ logic signed [9:0] y_moving9 = 9'd0;
 logic signed[9:0] y_moving10 = 9'd360;
 logic signed [9:0] y_moving11 = 9'd240;
 
-logic clk;
-logic [25:0] count;
-SB_HFOSC #(
-.CLKHF_DIV("0b00")
-) osc (
-.CLKHFPU(1'b1), // Power up
-.CLKHFEN(1'b1), // Enable
-.CLKHF(clk) // Clock output
-);
 
-always_ff @(posedge clk) begin
-    if(count == 26'b11111111111111111111111111)
-        count <= 26'b0;
-    else 
-    count <= count + 1;
-end
 
-// ---------------------------------------------------------
-//  120 Hz for 10 seconds, then 60 Hz for 10 seconds
-// ---------------------------------------------------------
 
-// Make a 1 Hz pulse from your 26-bit counter (approx 1 second)
-// ---------------------------------------------------------
-//  600 Hz for the first 30 seconds, then 60 Hz permanently
-// ---------------------------------------------------------
+logic sixtyHz;
+assign sixtyHz = (Row == 486) ? 1'b1 : 1'b0;
 
-// 1 Hz pulse from your 26-bit counter (≈1 second)
-logic oneHz;
-assign oneHz = (count == 26'd0);
-
-// Seconds counter: counts 0 → 30, then stops
-logic [5:0] seconds;
-always_ff @(posedge clk) begin
-    if (oneHz) begin
-        if (seconds < 30)
-            seconds <= seconds + 1;
-    end
-end
-
-// Speed selector
-logic sixtyHz0;
-logic sixtyHz1;
-logic sixtyHz2;
-
-// FAST MODE (600 Hz) for first 30 seconds
-// NORMAL MODE (60 Hz) afterward
-always_comb begin
-    if (seconds < 10)
-        sixtyHz0 = (Row % 8 == 0);   // 480 rows → ~600 triggers/s
-    else
-        sixtyHz0 = (Row == 486);     // your original 60 Hz pulse
-end
-
-always_comb begin
-    if (seconds < 12)
-        sixtyHz1 = (Row % 8 == 0);   // 480 rows → ~600 triggers/s
-    else
-        sixtyHz1 = (Row == 486);     // your original 60 Hz pulse
-end
-
-always_comb begin
-    if (seconds < 14)
-        sixtyHz2 = (Row % 8 == 0);   // 480 rows → ~600 triggers/s
-    else
-        sixtyHz2 = (Row == 486);     // your original 60 Hz pulse
-end
-
-always_ff @(posedge sixtyHz0) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving0 == 480) 
         y_moving0 <= 0;
     else
         y_moving0 <= y_moving0 + 1;
 end
 
-always_ff @(posedge sixtyHz0) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving1 == 480) 
         y_moving1 <= 0;
     else
         y_moving1 <= y_moving1 + 1;
 end
 
-always_ff @(posedge sixtyHz0) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving2 == 480) 
         y_moving2 <= 0;
     else
         y_moving2 <= y_moving2 + 1;
 end
 
-always_ff @(posedge sixtyHz0) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving3 == 480) 
         y_moving3 <= 0;
     else
@@ -182,56 +122,56 @@ always_ff @(posedge sixtyHz0) begin
 end
 
 
-always_ff @(posedge sixtyHz1) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving4 == 480) 
         y_moving4 <= 0;
     else
         y_moving4 <= y_moving4 + 1;
 end
 
-always_ff @(posedge sixtyHz1) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving5 == 480) 
         y_moving5 <= 0;
     else
         y_moving5 <= y_moving5 + 1;
 end
 
-always_ff @(posedge sixtyHz1) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving6 == 480) 
         y_moving6 <= 0;
     else
         y_moving6 <= y_moving6 + 1;
 end
 
-always_ff @(posedge sixtyHz1) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving7 == 480) 
         y_moving7 <= 0;
     else
         y_moving7 <= y_moving7 + 1;
 end
 
-always_ff @(posedge sixtyHz2) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving8 == 480) 
         y_moving8 <= 0;
     else
         y_moving8 <= y_moving8 + 1;
 end
 
-always_ff @(posedge sixtyHz2) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving9 == 480) 
         y_moving9 <= 0;
     else
         y_moving9 <= y_moving9 + 1;
 end
 
-always_ff @(posedge sixtyHz2) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving10 == 480) 
         y_moving10 <= 0;
     else
         y_moving10 <= y_moving10 + 1;
 end
 
-always_ff @(posedge sixtyHz2) begin
+always_ff @(posedge sixtyHz) begin
     if (y_moving11 == 480) 
         y_moving11 <= 0;
     else
@@ -418,8 +358,8 @@ always_comb begin
         digitxbackground = Col ;
         digitybackground = Row ;
 
-        img_xbackground = digitxbackground[9:3];   
-        img_ybackground = digitybackground[9:3];
+        img_xbackground = digitxbackground[9:2];   
+        img_ybackground = digitybackground[9:2];
         rgb_patterngen = img_pixelbackgounrd;
     end
 end
