@@ -12,3 +12,7 @@ set_io RGB[2] 32
 set_io RGB[3] 35
 set_io RGB[4] 31
 set_io RGB[5] 37
+
+set_io start 42
+set_io reset 2
+set_io donato 45

@@ -1,4 +1,4 @@
-module newbackground (
+module winscreen (
     input [7:0] x_input,    // 7 bits (0-79)
     input [6:0] y_input,    // 6 bits (0-59)
     output logic [5:0] data

@@ -23,6 +23,9 @@
 
 module top (
     input  logic       clk_12M,
+    input logic start,
+    input logic reset,
+    input logic donato,
     output logic       HSYNC,
     output logic       VSYNC,
     output logic [5:0] RGB
@@ -57,7 +60,10 @@ module top (
         .Row(ROW),
         .Col(COLUMN),
         .display_on(DISPLAY_ENABLE),
-        .rgb_patterngen(RGB)
+        .rgb_patterngen(RGB),
+        .instart(start),
+        .reset(reset),
+        .donato(donato)
     );
 
 endmodule
