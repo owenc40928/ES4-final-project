@@ -1,6 +1,4 @@
-// Patterngen module for ES4 lab 7 in SystemVerilog 
-// Optimized to fix ICESTORM_LCs expansion error via shared arithmetic
-// 27 August 2025
+// Patterngen module for ES4 Final Project in SystemVerilog 
 
 module patterngen(
     input  logic CLK,
@@ -16,7 +14,7 @@ module patterngen(
     // ------------------------------------------------------------------------
     // Sprite Input Wires
     // ------------------------------------------------------------------------
-    // We will drive these using shared arithmetic to save Logic Cells
+    // Drive these using shared arithmetic to save Logic Cells
     logic [4:0] img_xseven, img_yseven;
     logic [5:0] img_pixelseven;
 
@@ -51,11 +49,6 @@ module patterngen(
     logic [5:0] img_pixeln;
     logic [4:0] img_xn, img_yn;
     
-    // Win background dummy logic (detected from instantiation but definition missing in original snippet)
-    // Assuming standard behavior or removing if unused. 
-    // Kept placeholders to match your instantiation list if they existed in your full file.
-    // Note: 'winscreen' was instantiated in your snippet but wires img_xwinbackground weren't defined.
-    // I will focus on the main logic provided.
 
     // ------------------------------------------------------------------------
     // Module Instantiations
@@ -312,7 +305,7 @@ module patterngen(
     // ------------------------------------------------------------------------
     // Box Region Logic
     // ------------------------------------------------------------------------
-    // These define the bounds, but we will optimize how we use them.
+    // Defines bounds of box region
 
     logic draw_box_1; assign draw_box_1 = (Col < 170 && Col > 50) && (Row > y_moving0 && Row < y_moving0 + 120);
     logic draw_box_2; assign draw_box_2 = (Col < 170 && Col > 50) && (Row > y_moving1 && Row < y_moving1 + 120);
@@ -365,7 +358,7 @@ module patterngen(
     // ------------------------------------------------------------------------
 
     // 1. Common X Calculation
-    // Instead of calculating (Col - 51) multiple times, we do it once.
+    // Instead of calculating (Col - 51) multiple times, can just do it once
     logic [9:0] base_x_sub;
     always_comb begin
         if (Col < 170 && Col > 50)      base_x_sub = 51;
@@ -379,7 +372,7 @@ module patterngen(
     assign shared_raw_x = Col - base_x_sub;
 
     // 2. Target Selector and Y Offset
-    // We determine WHICH sprite is active and WHAT its Y-offset is.
+    // Determine which sprite is active and what its Y-offset is
     
     typedef enum logic [3:0] {
         ID_BG=0, ID_SEVEN=1, ID_DIA=2, ID_BAR=3, ID_CHER=4, 
@@ -408,7 +401,7 @@ module patterngen(
                 // Turn off if display off
                 if (!display_on && flag1 && flag2 && flag3) begin
                     // Handled at RGB output stage usually, but following logic:
-                    // If display_on is low, we output black.
+                    // If display_on is low, output black
                 end
                 
                 // --- Column 1 Logic ---
@@ -442,7 +435,7 @@ module patterngen(
                         target_y_sub = 161;
                         case(final_random_middle)
                             2'b00: target_sprite = ID_BAR;
-                            2'b01: target_sprite = ID_CHER; // Note: specific mapping from your code
+                            2'b01: target_sprite = ID_CHER;
                             2'b11: target_sprite = ID_DIA;
                             2'b10: target_sprite = ID_SEVEN;
                         endcase
@@ -469,7 +462,7 @@ module patterngen(
             end // End S1
 
             S2: begin
-                // Resolve Symbols based on random values
+                // Choose symbols based on random values from LFSR
                 case (final_random_left)
                     2'b00: sym_left = SYM_BAR; 2'b01: sym_left = SYM_DIA; 2'b10: sym_left = SYM_CHER; 2'b11: sym_left = SYM_SEV;
                 endcase
@@ -484,7 +477,7 @@ module patterngen(
                 if ((sym_left == sym_mid) && (sym_mid == sym_right)) begin
                     // JACKPOT
                     target_sprite = ID_JACK; 
-                    // Jackpot uses raw Col/Row in your code, so target_y_sub is irrelevant for math but set to 0
+                    // target_y_sub is irrelevant for jackpot but set to 0
                     target_y_sub = 0; 
                 end else if ((sym_left == sym_mid) ^ (sym_left == sym_right) ^ (sym_mid == sym_right)) begin
                     // WIN (Match 2)
@@ -508,9 +501,9 @@ module patterngen(
     assign shared_raw_y = Row - target_y_sub;
 
     // 4. Drive Module Inputs (Scaling)
-    // We drive ALL standard sprite modules with the same calculated coordinates.
-    // The inactive ones will output garbage, but we won't select their output in the RGB mux.
-    // This saves massive amounts of muxing logic on the inputs.
+    // Drive all standard sprite modules with the same coordinates
+    // The inactive ones will output nothing, but will not use their output
+    // Saves a lot of muxing logic
     
     assign img_xseven = shared_raw_x[6:2];
     assign img_yseven = shared_raw_y[6:2];
