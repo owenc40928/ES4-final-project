@@ -4,8 +4,8 @@ Due Date: 12/8/25
 
 Parts:
  - 1 Ice 40 FPGA
- - 3 10k ohm resistors
- - 3 push buttons
+ - 2 10k ohm resistors
+ - 2 push buttons
  - 1 VGA and 1 DB15 vga port
 
 File Logic
