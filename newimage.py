@@ -5,7 +5,7 @@ output_file = r'/Users/nicolasferrari/Downloads/jackpotfinal.txt'
 
 image = Image.open(image_path).convert("RGB")
 
-# 1. Resize to 80x60, 4x3 aspect ratio
+# Resize to 80x60, 4x3 aspect ratio
 image = image.resize((80, 60))
 
 width, height = image.size
